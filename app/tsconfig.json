@@ -1,0 +1,11 @@
+{
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+        // removeComments was added to demonstrate that the options in this 
+        // file are being applied in addition to the tsconfig.base.json file
+        "removeComments": true
+    },
+    "include":[
+        "./**/*"
+    ]
+}
