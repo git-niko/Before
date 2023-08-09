@@ -1,59 +1,24 @@
-function startGame() {
-    // starting a new game
+/// <reference path="player.ts" />
+/// <reference path="game.ts" />
 
-    const playerName: string | undefined = getInputValue('playerName');
-    logPlayer(playerName);
 
-    postScore(80, playerName);
-    postScore(-5, playerName);
-}
+let newGame: Game;
 
-function logPlayer(name: string = 'MultiMath Player'): void {
-    console.log(`New game starting for player: ${name}`);
-}
+// add click handler to the start game button
+document.getElementById('startGame')!.addEventListener('click', () => {
 
-function getInputValue(elementID: string): string | undefined {
-    // type assertion syntax #1 - OLD SYNTAX
-    const inputElement: HTMLInputElement = <HTMLInputElement>document.getElementById(elementID);
+    const player: Player = new Player();
 
-    // type assertion syntax #2 - NEWER SYNTAX
-    const inputElement2: HTMLInputElement = document.getElementById(elementID) as HTMLInputElement;
+    player.name = Utility.getInputValue('playerName');
 
-    if (inputElement.value === '') {
-        return undefined;
-    } else {
-        return inputElement.value;
-    }
-}
+    const problemCount: number = Number(Utility.getInputValue('problemCount'));
+    const factor: number = Number(Utility.getInputValue('factor'));
 
-function postScore(score: number, playerName: string = 'MultiMath Player'): void {
-    
-    // This variable can now be assigned 
-    // any function that takes a string
-    // parameter and returns void
-    let logger: (value: string) => void;
+    newGame = new Game(player, problemCount, factor);
+    newGame.displayGame();
+});
 
-    if (score < 0) {
-        // b/c logError and logMessage variables
-        // declared below have a string parameter
-        // and void return, they can be assigned
-        // to the logger variable created above
-        logger = logError;
-    } else {
-        logger = logMessage;
-    }
-
-    const scoreElement: HTMLElement | null = document.getElementById('postedScores');
-    scoreElement!.innerText = `${score} - ${playerName}`;
-
-    // Calling the logger anonymous function & passing it 
-    logger(`Score: ${score}`);
-}
-
-document.getElementById('startGame')!.addEventListener('click', startGame);
-
-const logMessage = (message: string): void => console.log(message);
-
-function logError(err: string): void {
-    console.error(err);
-}
+// add click handler to the calculate score button
+document.getElementById('calculate')!.addEventListener('click', () => {
+    newGame.calculateScore();
+});
